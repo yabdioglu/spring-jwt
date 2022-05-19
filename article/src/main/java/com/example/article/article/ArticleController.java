@@ -2,13 +2,13 @@ package com.example.article.article;
 
 import java.util.List;
 
+import com.example.article.config.AppUser;
+import com.example.article.config.LoggedInUser;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ArticleController {
@@ -22,7 +22,9 @@ public class ArticleController {
   }
 
   @PostMapping("/api/1.0/articles")
-  Article saveArticle(@RequestBody Article article){
+  Article saveArticle(@RequestBody Article article, @LoggedInUser AppUser appUser){
+    article.setUserId(appUser.getUserId());
+    article.setUsername(appUser.getUsername());
     return articleService.save(article);
   }
 
